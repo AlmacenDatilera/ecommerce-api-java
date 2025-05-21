@@ -3,6 +3,7 @@ package com.ecommerce.ecommerce.service.product;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -64,9 +65,11 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.productToProductDto(savedProduct);
     }
 
-    @Override
     public List<ProductDto> getAllProducts() {
-        return productRepository.findAll().stream().map(productMapper::productToProductDto).toList();
+        List<Product> products = productRepository.findAllWithCategoryAndImages();
+        return products.stream()
+                      .map(productMapper::productToProductDto)
+                      .collect(Collectors.toList());
     }
 
     @Override
